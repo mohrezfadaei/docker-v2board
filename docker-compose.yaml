@@ -1,0 +1,27 @@
+version: '3'
+services:
+  v2board:
+    build: .
+    image: v2board:latest
+    volumes:
+      - ./wwwlogs:/wwwlogs
+      - ./.caddy:/root/.caddy
+    ports:
+      - 80:80
+    networks:
+      - db
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:5.7.29
+    restart: unless-stopped
+    env_file: .env
+    expose:
+      - 3306/tcp
+    networks:
+      - db
+    volumes:
+      - /path/of/the/volume:/var/lib/mysql
+
+networks:
+  db:
